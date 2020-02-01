@@ -7,16 +7,16 @@ Similar to the kernel Infiniband architecture,
 rdma-core has a generic layer interface with applications
 and a lower-level vendor-specific callback layer.
 
-We look at those commands, libibverbs, and providers.
+This is a very high qualify repo, it's one of the best I've seen.
+We will look at how those commands are implemented,
+libibverbs internal, and vendor specific part (e.g., mlx5).
 
-I've hacked this rdma-core, in-kernel Infiniband layer,
-and `MLNX_OFED` before. `MLNX_OFED` is dirty,
-it modifies the rdma-core and in-kernel mlx driver
-and replace the open-source ones!
-I happen to come across this part again
-and thought I should keep some notes. Happy hacking!
+Happy hacking!
 
 ## Commands
+
+We use these commands a lot during our day-to-day RDMA usage.
+We can learn how they use the Linux Infiniband devices!
 
 - ibv_devinfo
 - iblinkinfo
@@ -56,9 +56,32 @@ Public Verbs API:
 - They are spread across many files.. because of compatible issues
 - `libibverbs/verbs.h`, `libibverbs/compat-1_0.c`
 
+I'm reading one of the control path operations, the `ibv_create_qp`.
+I followed its callpath, and confirmed that it is using ioctl at last.
+It's fine to use ioctl, these are infrequent calls.
+And I think this would apply to all the control path IB verbs.
+```c
+create_qp
+ mlx5_create_qp
+  ibv_cmd_create_qp_ex
+   execute_cmd_write
+     ioctl(fd)
+```
+
+Now, onto the data path.
+I think the kernel exposed a limited range of the PCIe data MMIO region to the userspace.
+And I think the kernel does not expose the PCIe configruation part, right? Need to confirm.
+
+I'm wondering: a) When this shared mapping is created? b) how much PCIe MMIO is exposed?
+c) will userspace be able to crash the device?
+
+
 ### Providers (Vendors)
 
-#### VMware Paravirtualized RDMA
+#### Mellanox
+TODO
+
+#### VMware Para-virtualized RDMA
 
 I was surprised to discover VMware drivers in this repo.
 I saw `providers/vmw_pvrdma`, the userspace driver to VMware paravirtualized RDMA device.
