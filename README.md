@@ -18,7 +18,27 @@ and thought I should keep some notes. Happy hacking!
 
 ## Commands
 
-## libibverbs and more
+- ibv_devinfo
+- iblinkinfo
+- ...
+
+## libibverbs
+
+### Examples
+
+Some useful userspace examples:
+
+- asyncwatch.c
+- device_list.c
+- devinfo.c
+- pingpong.c
+- rc_pingpong.c
+- srq_pingpong.c
+- uc_pingpong.c
+- ud_pingpong.c
+- xsrq_pingpong.c
+
+### Internal
 
 The first thing is to understand how these userspace libraries
 communicate directly with the device!
@@ -31,9 +51,14 @@ with no system call or context switch into the kernel.
 
 QUESTION: since PCIe MMIO space is directly exposed to userspace, is VFIO used here?
 
-## Providers (Vendors)
+Public Verbs API:
 
-### VMware Paravirtualized RDMA
+- They are spread across many files.. because of compatible issues
+- `libibverbs/verbs.h`, `libibverbs/compat-1_0.c`
+
+### Providers (Vendors)
+
+#### VMware Paravirtualized RDMA
 
 I was surprised to discover VMware drivers in this repo.
 I saw `providers/vmw_pvrdma`, the userspace driver to VMware paravirtualized RDMA device.
