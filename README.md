@@ -18,6 +18,19 @@ and thought I should keep some notes. Happy hacking!
 
 ## Commands
 
+## libibverbs and more
+
+The first thing is to understand how these userspace libraries
+communicate directly with the device!
+The kernel documentation explained it well:
+control path use some `/dev/infiniband/uverbs` ioctl methods,
+fast path operations are typically performed by writing
+directly to hardware registers mmap()ed into userspace,
+with no system call or context switch into the kernel.
+(https://www.kernel.org/doc/html/latest/infiniband/user_verbs.html)
+
+QUESTION: since PCIe MMIO space is directly exposed to userspace, is VFIO used here?
+
 ## Providers (Vendors)
 
 ### VMware Paravirtualized RDMA
