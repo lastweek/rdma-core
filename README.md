@@ -7,7 +7,7 @@ Similar to the kernel Infiniband architecture,
 rdma-core has a generic layer interface with applications
 and a lower-level vendor-specific callback layer.
 
-This is a very high qualify repo, it's one of the best I've seen.
+This is a very high quality repo, it's one of the best I've seen.
 We will look at how those commands are implemented,
 libibverbs internal, and vendor specific part (e.g., mlx5).
 
@@ -17,16 +17,20 @@ Happy hacking!
 
 We use these commands a lot during our day-to-day RDMA usage.
 We can learn how they use the Linux Infiniband devices!
+They are implemented in `infiniband-diags` folder.
 
 - ibv_devinfo
 - iblinkinfo
-- ...
+- ibping
+- ibaddr
+- more..
 
 ## libibverbs
 
 ### Examples
 
-Some useful userspace examples:
+Some useful IB verbs examples.
+These are the starting point for many people!
 
 - asyncwatch.c
 - device_list.c
@@ -40,9 +44,10 @@ Some useful userspace examples:
 
 ### Internal
 
-The first thing is to understand how these userspace libraries
-communicate directly with the device!
-The kernel documentation explained it well:
+The first thing is to understand how userspace libraries
+communicate with device directly.
+
+The kernel doc explained it well:
 control path use some `/dev/infiniband/uverbs` ioctl methods,
 fast path operations are typically performed by writing
 directly to hardware registers mmap()ed into userspace,
